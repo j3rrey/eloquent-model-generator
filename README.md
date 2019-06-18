@@ -183,3 +183,27 @@ class User extends Model
     }
 }
 ```
+
+
+```
+    public function generateModels()
+    {
+        $blacklist = [
+            'migrations',
+            'jobs',
+            'failed_jobs',
+            'validation_errors',
+        ];
+        $tables = DB::select('SHOW TABLES');
+        foreach($tables as $table)
+        {
+            foreach ($table as $key => $value) {
+                if (!in_array($value, $blacklist)){
+                    $modelName = ucfirst(str_singular($value));
+                    Artisan::call('krlove:generate:model ' . $modelName);
+                    echo  str_singular($value) . PHP_EOL;
+                }
+            }
+        }
+    }
+ ```
